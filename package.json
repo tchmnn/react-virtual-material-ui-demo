@@ -13,7 +13,8 @@
     "react": "16.12.0",
     "react-dom": "16.12.0",
     "react-scripts": "3.0.1",
-    "react-virtual": "2.2.0"
+    "react-virtual": "2.2.0",
+    "use-resize-observer": "^6.1.0"
   },
   "devDependencies": {
     "typescript": "3.8.3"

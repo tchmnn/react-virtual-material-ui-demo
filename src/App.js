@@ -1,66 +1,27 @@
 import React from "react";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import { makeStyles } from "@material-ui/core/styles";
-import { useVirtual } from "react-virtual";
-import faker from "faker";
+import Box from "@material-ui/core/Box";
+import Typography from "@material-ui/core/Typography";
+import Link from '@material-ui/core/Link';
+import DemoList from './DemoList'
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    width: 400,
-    height: 400,
-    overflow: `auto`,
-    border: `1px solid ${theme.palette.grey[900]}`
-  },
-  list: rowVirtualizer => ({
-    height: `${rowVirtualizer.totalSize}px`,
-    width: "100%",
-    position: "relative"
-  })
-}));
-
-const rows = faker.lorem.sentences(1000).split(". ");
-
-export default function App() {
-  const parentRef = React.useRef();
-  const estimateSize = React.useCallback(() => 35, []);
-  const rowVirtualizer = useVirtual({
-    size: rows.length,
-    parentRef,
-    estimateSize
-  });
-  const classes = useStyles(rowVirtualizer);
-
+function App() {
   return (
-    <div ref={parentRef} className={classes.root}>
-      <List className={classes.list}>
-        {rowVirtualizer.virtualItems.map(virtualRow => (
-          <VirtualListItem
-            key={virtualRow.index}
-            virtualRow={virtualRow}
-            row={rows[virtualRow.index]}
-          />
-        ))}
-      </List>
-    </div>
+    <Box display="flex" flexDirection="column" height="100%" maxWidth="sm" >
+      <Box p={1}>
+        <Typography component="h1" variant="h4" align="center">
+          <Link href="https://github.com/tanner-linsley/react-virtual" target="blank">React Virtual</Link> & <Link href="https://github.com/mui-org/material-ui" target="blank">Material UI</Link>
+        </Typography>
+      </Box>
+      <Box p={1} flexGrow={1}>
+        <DemoList />
+      </Box>
+      <Box p={1}>
+        <Typography variant="body2" align="center">
+          made with <span role="img" label="a laptop">💻</span> by <Link href="https://github.com/tchmnn" target="blank">tchmnn</Link>
+        </Typography>
+      </Box>
+    </Box>
   );
 }
 
-const makeVirtualListItemStyle = virtualRow => ({
-  position: "absolute",
-  top: 0,
-  left: 0,
-  width: "100%",
-  height: `${rows[virtualRow.index]}px`,
-  transform: `translateY(${virtualRow.start}px)`
-});
-
-function VirtualListItem({ virtualRow, row }) {
-  const style = makeVirtualListItemStyle(virtualRow);
-  return (
-    <ListItem ref={virtualRow.measureRef} style={style}>
-      <ListItemText>{row}</ListItemText>
-    </ListItem>
-  );
-}
+export default App;
