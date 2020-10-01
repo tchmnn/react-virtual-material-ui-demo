@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import { makeStyles } from "@material-ui/core/styles";
 import { useVirtual } from "react-virtual";
-import useResizeObserver from 'use-resize-observer';
+import useDimensions from "react-cool-dimensions";
 import faker from "faker";
 
 const rows = faker.lorem.sentences(1000).split(". ");
@@ -26,15 +26,20 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function DemoList() {
-  const { ref, width = 1, height = 1 } = useResizeObserver();
   const parentRef = React.useRef();
-  const estimateSize = React.useCallback(() => 56, [ width, height ]);
+  const { ref, width, height } = useDimensions();
+  const estimateSize = React.useCallback(() => 56, [width, height]);
   const rowVirtualizer = useVirtual({
     size: rows.length,
+    estimateSize,
     parentRef,
-    estimateSize
   });
   const classes = useStyles(rowVirtualizer);
+
+  // without this the list initially only paints 2 items
+  useEffect(() => {
+    rowVirtualizer.scrollToIndex(0);
+  }, []);
 
   return (
     <div ref={ref} className={classes.wrapper}>
